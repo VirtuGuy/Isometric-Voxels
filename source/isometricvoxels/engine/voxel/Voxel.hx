@@ -133,6 +133,8 @@ class Voxel extends FlxSprite {
         // Resets direction
         if (!hasDirections)
             direction = 0;
+        else
+            set_direction(direction);
 
         return value;
     }

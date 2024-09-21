@@ -22,4 +22,18 @@ class Constants {
      * This needs to be updated if the game's window size was modified.
     **/
     inline static public var WINDOW_TILE_HEIGHT = Math.floor(480 / TILE_SIZE);
+
+    /**
+     * A list of tiles that can be placed in a `VoxelWorld`.
+    **/
+    static public var TILES(default, never) = [
+        'tile',
+        'grass',
+        'dirt',
+        'wood',
+        'tile-stair',
+        'grass-stair',
+        'dirt-stair',
+        'wood-stair'
+    ];
 }

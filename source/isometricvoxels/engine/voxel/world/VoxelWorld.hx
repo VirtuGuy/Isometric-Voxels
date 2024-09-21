@@ -127,18 +127,19 @@ class VoxelWorld extends FlxGroup {
         var downPress:Bool = FlxG.keys.justPressed.S;
         var qPress:Bool = FlxG.keys.justPressed.Q;
         var ePress:Bool = FlxG.keys.justPressed.E;
-        var flipPress:Bool = FlxG.keys.justPressed.R;
+        var rotatePress:Bool = FlxG.keys.justPressed.R;
 
         // CAMERA KEYS
         var camLeftPress:Bool = FlxG.keys.pressed.LEFT;
         var camRightPress:Bool = FlxG.keys.pressed.RIGHT;
         var camUpPress:Bool = FlxG.keys.pressed.UP;
         var camDownPress:Bool = FlxG.keys.pressed.DOWN;
-        var camPosResetPress:Bool = flipPress && FlxG.keys.pressed.ALT;
+        var camPosResetPress:Bool = rotatePress && FlxG.keys.pressed.ALT;
 
         // PLACE KEYS
         var placePress:Bool = FlxG.mouse.justPressed;
         var removePress:Bool = FlxG.mouse.justPressedRight;
+        var clearPress:Bool = rotatePress && FlxG.keys.pressed.CONTROL;
 
         // TILE SELECTION
         if (FlxG.mouse.wheel != 0) {
@@ -159,12 +160,14 @@ class VoxelWorld extends FlxGroup {
         placeVoxel.tileY = FlxMath.bound(placeVoxel.tileY, worldY - (worldHeight - 1), worldY);
         placeVoxel.tileZ = FlxMath.bound(placeVoxel.tileZ, worldZ, worldZ + (worldLength - 1));
 
-        if (flipPress && placeVoxel.hasDirections)
+        if (rotatePress && placeVoxel.hasDirections)
             placeVoxel.direction += 90;
 
         // VOXEL PLACEMENT
         if (placePress || removePress)
             setVoxel(placeVoxel.tileX, placeVoxel.tileY, placeVoxel.tileZ, placePress ? placeVoxel.tileName : '');
+        if (clearPress)
+            clearVoxels();
 
         // CAMERA MOVEMENT
         if (camLeftPress || camRightPress) {
@@ -236,6 +239,18 @@ class VoxelWorld extends FlxGroup {
         }
         return null;
     }
+
+    /**
+     * Removes all the voxels from the world.
+    **/
+    public function clearVoxels() {
+        for (voxel in voxels) {
+            voxel.kill();
+            voxel.destroy();
+        }
+        voxels.clear();
+    }
+
 
     /**
      * Updates the visibility of all voxels. If a `Voxel` is covered by full `Voxel` objects, it will be invisible.

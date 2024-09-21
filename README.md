@@ -1,2 +1,2 @@
 # Isometric Voxels
- Silly.
+ An Isometric Voxel Engine made in HaxeFlixel.

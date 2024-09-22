@@ -1,6 +1,5 @@
 package isometricvoxels.engine.voxel;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
 import isometricvoxels.engine.util.Constants;
 
@@ -42,13 +41,13 @@ class Voxel extends FlxSprite {
      * Whether the `Voxel` has directions or not.
      * This value is determined by if the tile name is a stair, or anything else that can rotate.
     **/
-    public var hasDirections(get, null):Bool;
+    public var hasDirections(get, never):Bool;
 
     /**
      * Whether the `Voxel` occludes neighboring voxels from being visible on screen.
      * This should be disabled for stairs and transparent blocks.
     **/
-    public var occludes(get, null):Bool;
+    public var occludes(get, never):Bool;
 
 
     /**

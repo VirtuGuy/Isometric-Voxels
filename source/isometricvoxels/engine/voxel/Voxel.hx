@@ -64,9 +64,6 @@ class Voxel extends FlxSprite {
         this.tileX = tileX;
         this.tileY = tileY;
         this.tileZ = tileZ;
-
-        // Updating isn't necessary
-        active = false;
     }
 
     /**
@@ -108,6 +105,7 @@ class Voxel extends FlxSprite {
     private function set_tileName(value:String):String {
         if (this.tileName == value) return value;
         this.tileName = value;
+        this.active = false;
 
         // Loads the graphic
         var path:String = 'assets/images/tiles/$value.png';
@@ -146,7 +144,7 @@ class Voxel extends FlxSprite {
         this.direction = value;
 
         // Plays the animation for the set direction
-        if (animation.exists('direction$value'))
+        if (animation.exists('direction$value') && hasDirections)
             animation.play('direction$value');
 
         return value;

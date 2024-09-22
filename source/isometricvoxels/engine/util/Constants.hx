@@ -31,6 +31,7 @@ class Constants {
         'grass',
         'dirt',
         'wood',
+        'log',
         'tile-stair',
         'grass-stair',
         'dirt-stair',

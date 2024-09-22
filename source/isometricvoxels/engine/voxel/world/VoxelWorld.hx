@@ -139,6 +139,27 @@ class VoxelWorld extends FlxGroup {
     }
 
     override public function update(elapsed:Float) {
+        // MOVE KEYS
+        var moveLeft:Bool = ActionHandler.instance.MOVE_LEFT;
+        var moveRight:Bool = ActionHandler.instance.MOVE_RIGHT;
+        var moveUp:Bool = ActionHandler.instance.MOVE_UP;
+        var moveDown:Bool = ActionHandler.instance.MOVE_DOWN;
+        var layerUp:Bool = ActionHandler.instance.LAYER_UP;
+        var layerDown:Bool = ActionHandler.instance.LAYER_DOWN;
+        var rotate:Bool = ActionHandler.instance.ROTATE && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT;
+
+        // CAMERA KEYS
+        var camLeft:Bool = ActionHandler.instance.CAM_LEFT;
+        var camRight:Bool = ActionHandler.instance.CAM_RIGHT;
+        var camUp:Bool = ActionHandler.instance.CAM_UP;
+        var camDown:Bool = ActionHandler.instance.CAM_DOWN;
+        var camReset:Bool = ActionHandler.instance.CAM_RESET && FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT;
+
+        // PLACEMENT KEYS
+        var placeKey:Bool = ActionHandler.instance.PLACE;
+        var removeKey:Bool = ActionHandler.instance.REMOVE;
+        var clearKey:Bool = ActionHandler.instance.CLEAR && FlxG.keys.pressed.ALT && !FlxG.keys.pressed.CONTROL;
+
         // TILE SELECTION
         if (FlxG.mouse.wheel != 0 && hasBuilding) {
             curTile += FlxG.mouse.wheel;
@@ -149,38 +170,38 @@ class VoxelWorld extends FlxGroup {
 
         // PLACE VOXEL MOVEMENT
         if (hasBuilding) {
-            if (ActionHandler.instance.MOVE_UP || ActionHandler.instance.MOVE_DOWN)
-                placeVoxel.tileX += ActionHandler.instance.MOVE_UP ? -1 : 1;
-            if (ActionHandler.instance.LAYER_DOWN || ActionHandler.instance.LAYER_UP)
-                placeVoxel.tileY += ActionHandler.instance.LAYER_DOWN ? 1 : -1;
-            if (ActionHandler.instance.MOVE_LEFT || ActionHandler.instance.MOVE_RIGHT)
-                placeVoxel.tileZ += ActionHandler.instance.MOVE_LEFT ? -1 : 1;
+            if (moveUp || moveDown)
+                placeVoxel.tileX += moveUp ? -1 : 1;
+            if (layerDown || layerUp)
+                placeVoxel.tileY += layerDown ? 1 : -1;
+            if (moveLeft || moveRight)
+                placeVoxel.tileZ += moveLeft ? -1 : 1;
             placeVoxel.tileX = FlxMath.bound(placeVoxel.tileX, worldX, worldX + (worldWidth - 1));
             placeVoxel.tileY = FlxMath.bound(placeVoxel.tileY, worldY - (worldHeight - 1), worldY);
             placeVoxel.tileZ = FlxMath.bound(placeVoxel.tileZ, worldZ, worldZ + (worldLength - 1));
     
-            if (ActionHandler.instance.ROTATE && placeVoxel.hasDirections && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT)
+            if (rotate && placeVoxel.hasDirections)
                 placeVoxel.direction += 90;
         }
 
         // VOXEL PLACEMENT
-        if ((ActionHandler.instance.PLACE && canPlace) || (ActionHandler.instance.REMOVE && canRemove))
-            setVoxel(placeVoxel.tileX, placeVoxel.tileY, placeVoxel.tileZ, ActionHandler.instance.PLACE ? placeVoxel.tileName : '');
-        if (ActionHandler.instance.CLEAR && FlxG.keys.pressed.ALT && !FlxG.keys.pressed.CONTROL)
+        if ((placeKey && canPlace) || (removeKey && canRemove))
+            setVoxel(placeVoxel.tileX, placeVoxel.tileY, placeVoxel.tileZ, placeKey ? placeVoxel.tileName : '');
+        if (clearKey)
             clearVoxels();
 
         // CAMERA MOVEMENT
-        if (ActionHandler.instance.CAM_LEFT || ActionHandler.instance.CAM_RIGHT) {
-            var dir:Float = ActionHandler.instance.CAM_LEFT ? -100 : 100;
+        if (camLeft || camRight) {
+            var dir:Float = camLeft ? -100 : 100;
             dir *= elapsed * 2;
             worldCamObject.x += dir;
         }
-        if (ActionHandler.instance.CAM_DOWN || ActionHandler.instance.CAM_UP) {
-            var dir:Float = ActionHandler.instance.CAM_DOWN ? 100 : -100;
+        if (camDown || camUp) {
+            var dir:Float = camDown ? 100 : -100;
             dir *= elapsed * 2;
             worldCamObject.y += dir;
         }
-        if (ActionHandler.instance.CAM_RESET && FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT)
+        if (camReset)
             worldCamObject.screenCenter();
 
         super.update(elapsed);

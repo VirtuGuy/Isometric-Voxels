@@ -3,13 +3,13 @@ package isometricvoxels.engine.util;
 import flixel.input.actions.FlxAction.FlxActionDigital;
 
 /**
- * A class that handles input actions.
+ * A utility class for handling action input.
 **/
-class ActionHandler {
+class ActionUtil {
     /**
-     * An instance of `ActionHandler` that can be used for getting action inputs.
+     * An instance of `ActionUtil` that can be used for getting action inputs.
     **/
-    static public var instance:ActionHandler;
+    static public var instance:ActionUtil;
 
     // ACTIONS
     static var _move_left:FlxActionDigital;
@@ -109,15 +109,15 @@ class ActionHandler {
     // HANDLER
 
     /**
-     * Creates a new `ActionHandler` instance.
+     * Creates a new `ActionUtil` instance.
     **/
     public function new() {}
     
     /**
-     * Initializes the `ActionHandler` class and its actions.
+     * Initializes the `ActionUtil` class and its actions.
     **/
     static public function init() {
-        instance = new ActionHandler();
+        instance = new ActionUtil();
 
         // ACTION INIT
         _move_left = new FlxActionDigital('move_left');

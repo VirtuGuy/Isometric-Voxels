@@ -1,6 +1,7 @@
 package isometricvoxels.engine.voxel;
 
 import flixel.FlxSprite;
+import isometricvoxels.engine.util.AssetUtil;
 import isometricvoxels.engine.util.Constants;
 
 using StringTools;
@@ -107,14 +108,11 @@ class Voxel extends FlxSprite {
         this.tileName = value;
         this.active = false;
 
-        // Loads the graphic
-        var path:String = 'assets/images/tiles/$value.png';
-        var isAnimated:Bool = false;
-
         // Checks if the graphic is animated
+        var isAnimated:Bool = false;
         if (hasDirections)
             isAnimated = true;
-        loadGraphic(path, isAnimated, Std.int(Constants.TILE_SIZE / 2), 0);
+        loadGraphic(AssetUtil.getImage('tiles/$value'), isAnimated, Std.int(Constants.TILE_SIZE / 2), 0);
 
         // Adds directional animations if the voxel has directions
         if (hasDirections) {

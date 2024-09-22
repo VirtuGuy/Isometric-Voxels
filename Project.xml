@@ -87,5 +87,8 @@
 
 	<!-- _________________________________ Custom _______________________________ -->
 
-	<!--Place custom nodes like icons here-->
+	<icon path="assets/images/application/icon16.png" size="16" />
+	<icon path="assets/images/application/icon32.png" size="32" />
+	<icon path="assets/images/application/icon64.png" size="64" />
+	<icon path="assets/images/application/icon.png" />
 </project>

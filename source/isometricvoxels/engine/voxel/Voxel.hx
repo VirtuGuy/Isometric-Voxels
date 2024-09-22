@@ -107,6 +107,7 @@ class Voxel extends FlxSprite {
     }
 
     private function set_tileName(value:String):String {
+        if (this.tileName == value) return value;
         this.tileName = value;
 
         // Loads the graphic

@@ -34,7 +34,7 @@
 	<assets path="assets" />
 
 	<!--Provides the license in the export folders-->
-	<assets path="LICENSE" rename="LICENSE" />
+	<assets path="LICENSE" rename="LICENSE.txt" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
 

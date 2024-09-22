@@ -33,6 +33,9 @@
 	<source path="source" />
 	<assets path="assets" />
 
+	<!--Provides the license in the export folders-->
+	<assets path="LICENSE" rename="LICENSE" />
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />

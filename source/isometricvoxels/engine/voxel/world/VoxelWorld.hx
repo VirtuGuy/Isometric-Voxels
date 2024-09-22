@@ -7,6 +7,7 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import isometricvoxels.engine.util.ActionUtil;
+import isometricvoxels.engine.util.AssetUtil;
 import isometricvoxels.engine.util.Constants;
 import isometricvoxels.engine.util.VoxelUtil;
 
@@ -170,16 +171,24 @@ class VoxelWorld extends FlxGroup {
 
         // PLACE VOXEL MOVEMENT
         if (hasBuilding) {
+            // Place voxel movement
             if (moveUp || moveDown)
                 placeVoxel.tileX += moveUp ? -1 : 1;
             if (layerDown || layerUp)
                 placeVoxel.tileY += layerDown ? 1 : -1;
             if (moveLeft || moveRight)
                 placeVoxel.tileZ += moveLeft ? -1 : 1;
+
+            // Move sound
+            if (moveLeft || moveRight || moveUp || moveDown || layerUp || layerDown)
+                FlxG.sound.play(AssetUtil.getSound('move'), 0.6);
+
+            // Tile bound
             placeVoxel.tileX = FlxMath.bound(placeVoxel.tileX, worldX, worldX + (worldWidth - 1));
             placeVoxel.tileY = FlxMath.bound(placeVoxel.tileY, worldY - (worldHeight - 1), worldY);
             placeVoxel.tileZ = FlxMath.bound(placeVoxel.tileZ, worldZ, worldZ + (worldLength - 1));
     
+            // Rotation
             if (rotate && placeVoxel.hasDirections)
                 placeVoxel.direction += 90;
         }
@@ -219,7 +228,13 @@ class VoxelWorld extends FlxGroup {
     **/
     public function setVoxel(tileX:Float = 0, tileY:Float = 0, tileZ:Float = 0, tileName:String = 'tile') {
         var voxel:Voxel = getVoxel(tileX, tileY, tileZ);
-        if (voxel != null) {
+        var changedVoxel:Bool = true;
+        var hasVoxel:Bool = voxel != null;
+
+        if (hasVoxel) {
+            if (tileName == voxel.tileName)
+                changedVoxel = false;
+
             // Either removes or changes the tile name of the already existing voxel
             if (tileName == '') {
                 voxel.kill();
@@ -241,6 +256,15 @@ class VoxelWorld extends FlxGroup {
             // Sorts the voxels
             VoxelUtil.sortVoxelsInGroup(voxels);
         }
+
+        // Plays a placing/removing sound
+        if ((changedVoxel && tileName != '') || (tileName == '' && hasVoxel)) {
+            if (tileName == '')
+                FlxG.sound.play(AssetUtil.getSound('remove'));
+            else
+                FlxG.sound.play(AssetUtil.getSound('place'));
+        }
+
         updateVoxelVisibility();
     }
 
@@ -270,6 +294,9 @@ class VoxelWorld extends FlxGroup {
             voxel.destroy();
         }
         voxels.clear();
+
+        // Plays the "remove" sound
+        FlxG.sound.play(AssetUtil.getSound('remove'));
     }
 
 

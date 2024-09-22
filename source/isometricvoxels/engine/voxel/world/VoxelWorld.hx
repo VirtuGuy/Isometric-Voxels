@@ -6,6 +6,7 @@ import flixel.FlxObject;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
+import isometricvoxels.engine.util.ActionHandler;
 import isometricvoxels.engine.util.Constants;
 import isometricvoxels.engine.util.VoxelUtil;
 
@@ -138,27 +139,6 @@ class VoxelWorld extends FlxGroup {
     }
 
     override public function update(elapsed:Float) {
-        // MOVE KEYS
-        var leftPress:Bool = FlxG.keys.justPressed.A;
-        var rightPress:Bool = FlxG.keys.justPressed.D;
-        var upPress:Bool = FlxG.keys.justPressed.W;
-        var downPress:Bool = FlxG.keys.justPressed.S;
-        var qPress:Bool = FlxG.keys.justPressed.Q;
-        var ePress:Bool = FlxG.keys.justPressed.E;
-        var rotatePress:Bool = FlxG.keys.justPressed.R;
-
-        // CAMERA KEYS
-        var camLeftPress:Bool = FlxG.keys.pressed.LEFT;
-        var camRightPress:Bool = FlxG.keys.pressed.RIGHT;
-        var camUpPress:Bool = FlxG.keys.pressed.UP;
-        var camDownPress:Bool = FlxG.keys.pressed.DOWN;
-        var camPosResetPress:Bool = rotatePress && FlxG.keys.pressed.ALT;
-
-        // PLACE KEYS
-        var placePress:Bool = FlxG.mouse.justPressed;
-        var removePress:Bool = FlxG.mouse.justPressedRight;
-        var clearPress:Bool = rotatePress && FlxG.keys.pressed.CONTROL;
-
         // TILE SELECTION
         if (FlxG.mouse.wheel != 0 && hasBuilding) {
             curTile += FlxG.mouse.wheel;
@@ -169,38 +149,38 @@ class VoxelWorld extends FlxGroup {
 
         // PLACE VOXEL MOVEMENT
         if (hasBuilding) {
-            if (upPress || downPress)
-                placeVoxel.tileX += upPress ? -1 : 1;
-            if (qPress || ePress)
-                placeVoxel.tileY += qPress ? 1 : -1;
-            if (leftPress || rightPress)
-                placeVoxel.tileZ += leftPress ? -1 : 1;
+            if (ActionHandler.instance.MOVE_UP || ActionHandler.instance.MOVE_DOWN)
+                placeVoxel.tileX += ActionHandler.instance.MOVE_UP ? -1 : 1;
+            if (ActionHandler.instance.LAYER_DOWN || ActionHandler.instance.LAYER_UP)
+                placeVoxel.tileY += ActionHandler.instance.LAYER_DOWN ? 1 : -1;
+            if (ActionHandler.instance.MOVE_LEFT || ActionHandler.instance.MOVE_RIGHT)
+                placeVoxel.tileZ += ActionHandler.instance.MOVE_LEFT ? -1 : 1;
             placeVoxel.tileX = FlxMath.bound(placeVoxel.tileX, worldX, worldX + (worldWidth - 1));
             placeVoxel.tileY = FlxMath.bound(placeVoxel.tileY, worldY - (worldHeight - 1), worldY);
             placeVoxel.tileZ = FlxMath.bound(placeVoxel.tileZ, worldZ, worldZ + (worldLength - 1));
     
-            if (rotatePress && placeVoxel.hasDirections && !clearPress && !camPosResetPress)
+            if (ActionHandler.instance.ROTATE && placeVoxel.hasDirections && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT)
                 placeVoxel.direction += 90;
         }
 
         // VOXEL PLACEMENT
-        if ((placePress && canPlace) || (removePress && canRemove))
-            setVoxel(placeVoxel.tileX, placeVoxel.tileY, placeVoxel.tileZ, placePress ? placeVoxel.tileName : '');
-        if (clearPress)
+        if ((ActionHandler.instance.PLACE && canPlace) || (ActionHandler.instance.REMOVE && canRemove))
+            setVoxel(placeVoxel.tileX, placeVoxel.tileY, placeVoxel.tileZ, ActionHandler.instance.PLACE ? placeVoxel.tileName : '');
+        if (ActionHandler.instance.CLEAR && FlxG.keys.pressed.ALT && !FlxG.keys.pressed.CONTROL)
             clearVoxels();
 
         // CAMERA MOVEMENT
-        if (camLeftPress || camRightPress) {
-            var dir:Float = camLeftPress ? -100 : 100;
+        if (ActionHandler.instance.CAM_LEFT || ActionHandler.instance.CAM_RIGHT) {
+            var dir:Float = ActionHandler.instance.CAM_LEFT ? -100 : 100;
             dir *= elapsed * 2;
             worldCamObject.x += dir;
         }
-        if (camDownPress || camUpPress) {
-            var dir:Float = camUpPress ? -100 : 100;
+        if (ActionHandler.instance.CAM_DOWN || ActionHandler.instance.CAM_UP) {
+            var dir:Float = ActionHandler.instance.CAM_DOWN ? 100 : -100;
             dir *= elapsed * 2;
             worldCamObject.y += dir;
         }
-        if (camPosResetPress)
+        if (ActionHandler.instance.CAM_RESET && FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT)
             worldCamObject.screenCenter();
 
         super.update(elapsed);

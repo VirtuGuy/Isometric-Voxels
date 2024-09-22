@@ -47,32 +47,50 @@ class VoxelWorld extends FlxGroup {
     /**
      * The world X position in tiles.
     **/
-    public var worldX:Float = 5;
+    public var worldX(default, set):Float = 5;
 
     /**
      * The world Y position in tiles.
     **/
-    public var worldY:Float = 5;
+    public var worldY(default, set):Float = 5;
 
     /**
      * The world Z position in tiles.
     **/
-    public var worldZ:Float = 5;
+    public var worldZ(default, set):Float = 5;
 
     /**
      * How many blocks wide the world is.
     **/
-    public var worldWidth:Int = 0;
+    public var worldWidth(default, set):Int = 0;
 
     /**
      * How many blocks tall the world is.
     **/
-    public var worldHeight:Int = 0;
+    public var worldHeight(default, set):Int = 0;
 
     /**
      * How many blocks long the world is.
     **/
-    public var worldLength:Int = 0;
+    public var worldLength(default, set):Int = 0;
+
+    /**
+     * Whether the player can place voxels or not.
+     * Disabling both `canPlace` and `canRemove` will completely disable building.
+    **/
+    public var canPlace(default, set):Bool = true;
+
+    /**
+     * Whether the player can remove voxels or not.
+     * Disabling both `canPlace` and `canRemove` will completely disable building.
+    **/
+    public var canRemove(default, set):Bool = true;
+
+
+    /**
+     * If the `VoxelWorld` supports building and removing voxels.
+    **/
+    public var hasBuilding(get, never):Bool;
 
 
     /**
@@ -142,7 +160,7 @@ class VoxelWorld extends FlxGroup {
         var clearPress:Bool = rotatePress && FlxG.keys.pressed.CONTROL;
 
         // TILE SELECTION
-        if (FlxG.mouse.wheel != 0) {
+        if (FlxG.mouse.wheel != 0 && hasBuilding) {
             curTile += FlxG.mouse.wheel;
             if (curTile < 0) curTile = Constants.TILES.length - 1;
             if (curTile >= Constants.TILES.length) curTile = 0;
@@ -150,21 +168,23 @@ class VoxelWorld extends FlxGroup {
         }
 
         // PLACE VOXEL MOVEMENT
-        if (upPress || downPress)
-            placeVoxel.tileX += upPress ? -1 : 1;
-        if (qPress || ePress)
-            placeVoxel.tileY += qPress ? 1 : -1;
-        if (leftPress || rightPress)
-            placeVoxel.tileZ += leftPress ? -1 : 1;
-        placeVoxel.tileX = FlxMath.bound(placeVoxel.tileX, worldX, worldX + (worldWidth - 1));
-        placeVoxel.tileY = FlxMath.bound(placeVoxel.tileY, worldY - (worldHeight - 1), worldY);
-        placeVoxel.tileZ = FlxMath.bound(placeVoxel.tileZ, worldZ, worldZ + (worldLength - 1));
-
-        if (rotatePress && placeVoxel.hasDirections)
-            placeVoxel.direction += 90;
+        if (hasBuilding) {
+            if (upPress || downPress)
+                placeVoxel.tileX += upPress ? -1 : 1;
+            if (qPress || ePress)
+                placeVoxel.tileY += qPress ? 1 : -1;
+            if (leftPress || rightPress)
+                placeVoxel.tileZ += leftPress ? -1 : 1;
+            placeVoxel.tileX = FlxMath.bound(placeVoxel.tileX, worldX, worldX + (worldWidth - 1));
+            placeVoxel.tileY = FlxMath.bound(placeVoxel.tileY, worldY - (worldHeight - 1), worldY);
+            placeVoxel.tileZ = FlxMath.bound(placeVoxel.tileZ, worldZ, worldZ + (worldLength - 1));
+    
+            if (rotatePress && placeVoxel.hasDirections && !clearPress && !camPosResetPress)
+                placeVoxel.direction += 90;
+        }
 
         // VOXEL PLACEMENT
-        if (placePress || removePress)
+        if ((placePress && canPlace) || (removePress && canRemove))
             setVoxel(placeVoxel.tileX, placeVoxel.tileY, placeVoxel.tileZ, placePress ? placeVoxel.tileName : '');
         if (clearPress)
             clearVoxels();
@@ -269,6 +289,81 @@ class VoxelWorld extends FlxGroup {
             voxel.visible = !surrounded;
         }
     }
+
+
+    private function set_worldX(value:Float):Float {
+        this.worldX = value;
+        if (grid != null)
+            grid.tileX = value;
+        if (placeVoxel != null)
+            placeVoxel.tileX = value;
+        return value;
+    }
+
+    private function set_worldY(value:Float):Float {
+        this.worldY = value;
+        if (grid != null)
+            grid.tileY = value;
+        if (placeVoxel != null)
+            placeVoxel.tileY = value;
+        return value;
+    }
+
+    private function set_worldZ(value:Float):Float {
+        this.worldZ = value;
+        if (grid != null)
+            grid.tileZ = value;
+        if (placeVoxel != null)
+            placeVoxel.tileZ = value;
+        return value;
+    }
+
+    private function set_worldWidth(value:Int):Int {
+        this.worldWidth = value;
+        if (grid != null)
+            grid.gridWidth = value;
+        return value;
+    }
+
+    private function set_worldHeight(value:Int):Int {
+        this.worldHeight = value;
+        return value;
+    }
+
+    private function set_worldLength(value:Int):Int {
+        this.worldLength = value;
+        if (grid != null)
+            grid.gridLength = value;
+        return value;
+    }
+
+    private function set_canPlace(value:Bool):Bool {
+        this.canPlace = value;
+
+        // Place voxel toggling
+        if (placeVoxel != null) {
+            placeVoxel.active = hasBuilding;
+            placeVoxel.visible = hasBuilding;
+        }
+        return value;
+    }
+
+    private function set_canRemove(value:Bool):Bool {
+        this.canRemove = value;
+
+        // Place voxel toggling
+        if (placeVoxel != null) {
+            placeVoxel.active = hasBuilding;
+            placeVoxel.visible = hasBuilding;
+        }
+        return value;
+    }
+
+
+    private function get_hasBuilding():Bool {
+        return canPlace || canRemove;
+    }
+
 
     override public function destroy() {
         super.destroy();

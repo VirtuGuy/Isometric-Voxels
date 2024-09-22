@@ -10,27 +10,27 @@ class VoxelGrid extends FlxTypedGroup<Voxel> {
     /**
      * The X position offset in tiles.
     **/
-    public var tileX:Float = 0;
+    public var tileX(default, set):Float = 0;
 
     /**
      * The Y position offset in tiles.
     **/
-    public var tileY:Float = 0;
+    public var tileY(default, set):Float = 0;
 
     /**
      * The Z position offset in tiles.
     **/
-    public var tileZ:Float = 0;
+    public var tileZ(default, set):Float = 0;
 
     /**
      * The width of the `Grid` object in tiles.
     **/
-    public var gridWidth:Int = 5;
+    public var gridWidth(default, set):Int;
 
     /**
      * The length of the `Grid` object in tiles.
     **/
-    public var gridLength:Int = 5;
+    public var gridLength(default, set):Int;
 
 
     /**
@@ -47,8 +47,20 @@ class VoxelGrid extends FlxTypedGroup<Voxel> {
         this.tileX = tileX;
         this.tileY = tileY;
         this.tileZ = tileZ;
-        this.gridWidth = gridWidth;
-        this.gridLength = gridLength;
+        this.gridWidth = Std.int(Math.abs(gridWidth));
+        this.gridLength = Std.int(Math.abs(gridLength));
+    }
+
+    /**
+     * Completely reloads the grid.
+    **/
+    public function reloadGrid() {
+        // Clears the grid
+        for (voxel in members) {
+            voxel.kill();
+            voxel.destroy();
+        }
+        clear();
 
         // GRID VOXEL CREATION
         for (w in 0...gridWidth) {
@@ -60,5 +72,36 @@ class VoxelGrid extends FlxTypedGroup<Voxel> {
 
         // VOXEL SORTING
         VoxelUtil.sortVoxelsInGroup(this);
+    }
+
+
+    private function set_tileX(value:Float):Float {
+        this.tileX = value;
+        reloadGrid();
+        return value;
+    }
+
+    private function set_tileY(value:Float):Float {
+        this.tileY = value;
+        reloadGrid();
+        return value;
+    }
+
+    private function set_tileZ(value:Float):Float {
+        this.tileZ = value;
+        reloadGrid();
+        return value;
+    }
+
+    private function set_gridWidth(value:Int):Int {
+        this.gridWidth = value;
+        reloadGrid();
+        return value;
+    }
+
+    private function set_gridLength(value:Int):Int {
+        this.gridLength = value;
+        reloadGrid();
+        return value;
     }
 }

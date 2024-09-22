@@ -1,7 +1,5 @@
 package isometricvoxels.engine.util;
 
-import flixel.FlxG;
-
 /**
  * A class with constant variables that can be used across the engine.
 **/

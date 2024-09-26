@@ -42,6 +42,11 @@ class VoxelWorld extends FlxGroup {
     public var placeVoxel:Voxel;
 
     /**
+     * A list of tiles that can be placed in the `VoxelWorld`.
+    **/
+    public var tiles:Array<String> = [];
+
+    /**
      * The index of the currently selected tile.
     **/
     public var curTile:Int = 0;
@@ -114,6 +119,11 @@ class VoxelWorld extends FlxGroup {
         this.worldHeight = worldHeight;
         this.worldLength = worldLength;
 
+        // TILE LIST
+        var listPath:String = AssetUtil.getDataFile('tilesList.txt');
+        if (AssetUtil.exists(listPath))
+            tiles = AssetUtil.getTextAsArray(listPath);
+
         // CAMERA
         worldCam = new FlxCamera();
         worldCam.bgColor = bgColor;
@@ -133,7 +143,7 @@ class VoxelWorld extends FlxGroup {
         voxels.cameras = [worldCam];
         add(voxels);
 
-        placeVoxel = new Voxel(worldX, worldY, worldZ, Constants.TILES[curTile]);
+        placeVoxel = new Voxel(worldX, worldY, worldZ, tiles[curTile]);
         placeVoxel.alpha = 0.5;
         placeVoxel.cameras = [worldCam];
         add(placeVoxel);
@@ -164,9 +174,9 @@ class VoxelWorld extends FlxGroup {
         // TILE SELECTION
         if (FlxG.mouse.wheel != 0 && hasBuilding) {
             curTile += FlxG.mouse.wheel;
-            if (curTile < 0) curTile = Constants.TILES.length - 1;
-            if (curTile >= Constants.TILES.length) curTile = 0;
-            placeVoxel.tileName = Constants.TILES[curTile];
+            if (curTile < 0) curTile = tiles.length - 1;
+            if (curTile >= tiles.length) curTile = 0;
+            placeVoxel.tileName = tiles[curTile];
         }
 
         // PLACE VOXEL MOVEMENT

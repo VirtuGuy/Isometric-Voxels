@@ -1,6 +1,7 @@
 package isometricvoxels.engine.voxel;
 
 import flixel.FlxSprite;
+import haxe.Json;
 import isometricvoxels.engine.util.AssetUtil;
 import isometricvoxels.engine.util.Constants;
 
@@ -36,6 +37,11 @@ class Voxel extends FlxSprite {
      * The direction value also resets when going over 360.
     **/
     public var direction(default, set):Int = 0;
+
+    /**
+     * Data used for the current tile.
+    **/
+    public var data:VoxelData;
 
 
     /**
@@ -103,16 +109,23 @@ class Voxel extends FlxSprite {
         return value;
     }
 
-    private function set_tileName(value:String):String {
-        if (this.tileName == value) return value;
+    private function set_tileName(value:Null<String>):String {
+        if (this.tileName == value || value == null) return value;
         this.tileName = value;
         this.active = false;
 
-        // Checks if the graphic is animated
-        var isAnimated:Bool = false;
-        if (hasDirections)
-            isAnimated = true;
-        loadGraphic(AssetUtil.getImage('tiles/$value'), isAnimated, Std.int(Constants.TILE_SIZE / 2), 0);
+        // Gets the voxel data for the tile
+        var dataPath:String = AssetUtil.getDataFile('tiles/$value.json');
+        if (AssetUtil.exists(dataPath))
+            data = Json.parse(AssetUtil.getText(dataPath));
+        else
+            data = {
+                occludes: true,
+                directional: false
+            }
+
+        // Loads the tile graphic
+        loadGraphic(AssetUtil.getImage('tiles/$value'), hasDirections, Std.int(Constants.TILE_SIZE / 2), 0);
 
         // Adds directional animations if the voxel has directions
         if (hasDirections) {
@@ -150,14 +163,15 @@ class Voxel extends FlxSprite {
 
 
     private function get_hasDirections():Bool {
-        if (tileName.endsWith('-stair'))
-            return true;
-        return false;
+        return data?.directional ?? false;
     }
 
     private function get_occludes():Bool {
-        if (tileName.endsWith('-stair'))
-            return false;
-        return true;
+        return data?.occludes ?? true;
     }
+}
+
+typedef VoxelData = {
+    occludes:Null<Bool>,
+    directional:Null<Bool>
 }

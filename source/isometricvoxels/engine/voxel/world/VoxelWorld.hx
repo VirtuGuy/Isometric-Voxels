@@ -190,7 +190,7 @@ class VoxelWorld extends FlxGroup {
                 placeVoxel.tileZ += moveLeft ? -1 : 1;
 
             // Move sound
-            if (moveLeft || moveRight || moveUp || moveDown || layerUp || layerDown)
+            if (moveLeft || moveRight || moveUp || moveDown || layerUp || layerDown || (rotate && placeVoxel.hasDirections))
                 FlxG.sound.play(AssetUtil.getSound('move'), 0.6);
 
             // Tile bound
@@ -275,6 +275,7 @@ class VoxelWorld extends FlxGroup {
                 FlxG.sound.play(AssetUtil.getSound('place'));
         }
 
+        // Updates the visibility of the voxels
         updateVoxelVisibility();
     }
 

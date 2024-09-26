@@ -157,19 +157,19 @@ class VoxelWorld extends FlxGroup {
         var moveDown:Bool = ActionUtil.instance.MOVE_DOWN;
         var layerUp:Bool = ActionUtil.instance.LAYER_UP;
         var layerDown:Bool = ActionUtil.instance.LAYER_DOWN;
-        var rotate:Bool = ActionUtil.instance.ROTATE && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT;
+        var rotate:Bool = ActionUtil.instance.ROTATE;
 
         // CAMERA KEYS
         var camLeft:Bool = ActionUtil.instance.CAM_LEFT;
         var camRight:Bool = ActionUtil.instance.CAM_RIGHT;
         var camUp:Bool = ActionUtil.instance.CAM_UP;
         var camDown:Bool = ActionUtil.instance.CAM_DOWN;
-        var camReset:Bool = ActionUtil.instance.CAM_RESET && FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT;
+        var camReset:Bool = ActionUtil.instance.CAM_RESET;
 
         // PLACEMENT KEYS
         var placeKey:Bool = ActionUtil.instance.PLACE;
         var removeKey:Bool = ActionUtil.instance.REMOVE;
-        var clearKey:Bool = ActionUtil.instance.CLEAR && FlxG.keys.pressed.ALT && !FlxG.keys.pressed.CONTROL;
+        var clearKey:Bool = ActionUtil.instance.CLEAR;
 
         // TILE SELECTION
         if (FlxG.mouse.wheel != 0 && hasBuilding) {
@@ -299,14 +299,16 @@ class VoxelWorld extends FlxGroup {
      * Removes all the voxels from the world.
     **/
     public function clearVoxels() {
+        // Plays the "remove" sound
+        if (voxels.length > 0)
+            FlxG.sound.play(AssetUtil.getSound('remove'));
+
+        // Removes the voxels
         for (voxel in voxels) {
             voxel.kill();
             voxel.destroy();
         }
         voxels.clear();
-
-        // Plays the "remove" sound
-        FlxG.sound.play(AssetUtil.getSound('remove'));
     }
 
 

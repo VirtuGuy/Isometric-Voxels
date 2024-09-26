@@ -49,6 +49,8 @@ class VoxelGrid extends FlxTypedGroup<Voxel> {
         this.tileZ = tileZ;
         this.gridWidth = Std.int(Math.abs(gridWidth));
         this.gridLength = Std.int(Math.abs(gridLength));
+
+        active = false;
     }
 
     /**

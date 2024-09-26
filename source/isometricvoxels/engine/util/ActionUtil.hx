@@ -1,5 +1,6 @@
 package isometricvoxels.engine.util;
 
+import flixel.FlxG;
 import flixel.input.actions.FlxAction.FlxActionDigital;
 
 /**
@@ -9,7 +10,7 @@ class ActionUtil {
     /**
      * An instance of `ActionUtil` that can be used for getting action inputs.
     **/
-    static public var instance:ActionUtil;
+    static public var instance(get, default):ActionUtil;
 
     // ACTIONS
     static var _move_left:FlxActionDigital;
@@ -33,77 +34,77 @@ class ActionUtil {
     // CHECKS
     public var MOVE_LEFT(get, never):Bool;
     private function get_MOVE_LEFT():Bool {
-        return _move_left.check();
+        return _move_left?.check() ?? false;
     }
 
     public var MOVE_RIGHT(get, never):Bool;
     private function get_MOVE_RIGHT():Bool {
-        return _move_right.check();
+        return _move_right?.check() ?? false;
     }
 
     public var MOVE_UP(get, never):Bool;
     private function get_MOVE_UP():Bool {
-        return _move_up.check();
+        return _move_up?.check() ?? false;
     }
 
     public var MOVE_DOWN(get, never):Bool;
     private function get_MOVE_DOWN():Bool {
-        return _move_down.check();
+        return _move_down?.check() ?? false;
     }
 
     public var LAYER_UP(get, never):Bool;
     private function get_LAYER_UP():Bool {
-        return _layer_up.check();
+        return _layer_up?.check() ?? false;
     }
 
     public var LAYER_DOWN(get, never):Bool;
     private function get_LAYER_DOWN():Bool {
-        return _layer_down.check();
+        return _layer_down?.check() ?? false;
     }
 
     public var ROTATE(get, never):Bool;
     private function get_ROTATE():Bool {
-        return _rotate.check();
+        return _rotate?.check() ?? false && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT;
     }
 
     public var CAM_LEFT(get, never):Bool;
     private function get_CAM_LEFT():Bool {
-        return _cam_left.check();
+        return _cam_left?.check() ?? false;
     }
 
     public var CAM_RIGHT(get, never):Bool;
     private function get_CAM_RIGHT():Bool {
-        return _cam_right.check();
+        return _cam_right?.check() ?? false;
     }
 
     public var CAM_UP(get, never):Bool;
     private function get_CAM_UP():Bool {
-        return _cam_up.check();
+        return _cam_up?.check() ?? false;
     }
 
     public var CAM_DOWN(get, never):Bool;
     private function get_CAM_DOWN():Bool {
-        return _cam_down.check();
+        return _cam_down?.check() ?? false;
     }
 
     public var CAM_RESET(get, never):Bool;
     private function get_CAM_RESET():Bool {
-        return _cam_reset.check();
+        return _cam_reset?.check() ?? false && FlxG.keys.pressed.ALT && !FlxG.keys.pressed.CONTROL;
     }
 
     public var PLACE(get, never):Bool;
     private function get_PLACE():Bool {
-        return _place.check();
+        return _place?.check() ?? false;
     }
 
     public var REMOVE(get, never):Bool;
     private function get_REMOVE():Bool {
-        return _remove.check();
+        return _remove?.check() ?? false;
     }
 
     public var CLEAR(get, never):Bool;
     private function get_CLEAR():Bool {
-        return _clear.check();
+        return _clear?.check() ?? false && FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT;
     }
 
     // HANDLER
@@ -156,5 +157,10 @@ class ActionUtil {
         _place.addMouse(LEFT, JUST_PRESSED);
         _remove.addMouse(RIGHT, JUST_PRESSED);
         _clear.addKey(R, JUST_PRESSED);
+    }
+
+
+    static function get_instance():ActionUtil {
+        return instance ?? new ActionUtil();
     }
 }

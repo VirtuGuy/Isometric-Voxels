@@ -302,7 +302,7 @@ class VoxelWorld extends FlxGroup {
     public function clearVoxels() {
         // Plays the "remove" sound
         if (voxels.length > 0)
-            FlxG.sound.play(AssetUtil.getSound('remove'));
+            FlxG.sound.play(AssetUtil.getSound('clear'));
 
         // Removes the voxels
         for (voxel in voxels) {

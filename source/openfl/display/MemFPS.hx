@@ -27,17 +27,17 @@ class MemFPS extends TextField {
 	/**
 	 * Creates a new `MemFPS` text field.
 	 *
-	 * @param inX The initial X position of the `MemFPS` text field.
-	 * @param inY The initial Y position of the `MemFPS` text field.
-	 * @param inCol The initial text color of the `MemFPS` text field.
+	 * @param x The initial X position of the `MemFPS` text field.
+	 * @param y The initial Y position of the `MemFPS` text field.
+	 * @param color The initial text color of the `MemFPS` text field.
 	**/
-	public function new(inX:Float = 10.0, inY:Float = 10.0, inCol:Int = 0x000000) {
+	public function new(x:Float = 10.0, y:Float = 10.0, color:Int = 0x000000) {
 		super();
-		this.x = inX;
-		this.y = inY;
+		this.x = x;
+		this.y = y;
 
 		selectable = false;
-		defaultTextFormat = new TextFormat("_sans", 12, inCol);
+		defaultTextFormat = new TextFormat("_sans", 12, color);
 		text = "FPS: ";
 
 		times = [];
@@ -52,7 +52,7 @@ class MemFPS extends TextField {
 	 * Runs when the `MemFPS` text field enters a new frame.
 	**/
 	private function onEnter(_) {
-		// FPS
+		// FRAMERATE
 		var now = Timer.stamp();
 		times.push(now);
 		while (times[0] < now - 1)
@@ -64,6 +64,6 @@ class MemFPS extends TextField {
 
 		// TEXT DISPLAY
 		if (visible)
-			text = "FPS: " + times.length + "\nMEM: " + mem + " MB\nMEM peak: " + memPeak + " MB";	
+			text = 'FPS: ${times.length}\nMEM: $mem MB / $memPeak MB';
 	}
 }

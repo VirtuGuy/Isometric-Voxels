@@ -8,7 +8,7 @@ import openfl.text.TextFormat;
 
 
 /**
- * FPS class extension to display memory usage.
+ * `TextField` for displaying framerate and memory.
  *
  * @author Kirill Poletaev
 **/

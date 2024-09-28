@@ -35,6 +35,7 @@ class PlayState extends FlxState {
 		ModUtil.loadAllMods();
 		ActionUtil.init();
 		FlxG.mouse.visible = false;
+		FlxG.stage.showDefaultContextMenu = false;
 
 		// VOXEL WORLD
 		world = new VoxelWorld();

@@ -31,6 +31,7 @@ class ModUtil {
     **/
     static public function init() {
         #if (MODDING && polymod)
+        // Initializes Polymod
         Polymod.init({
             modRoot: MOD_DIR,
             dirs: mods,
@@ -38,6 +39,8 @@ class ModUtil {
             apiVersionRule: API_VER,
             errorCallback: _onError
         });
+
+        // Clears the asset cache
         Polymod.clearCache();
         #end
     }
@@ -69,7 +72,7 @@ class ModUtil {
     **/
     static public function loadAllMods() {
         #if (MODDING && polymod)
-        for (mod in Polymod.scan({apiVersionRule: API_VER}))
+        for (mod in Polymod.scan({apiVersionRule: API_VER, errorCallback: _onError}))
             loadMod(mod.id);
         #end
     }

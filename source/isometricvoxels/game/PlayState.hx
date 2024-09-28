@@ -8,6 +8,7 @@ import isometricvoxels.engine.util.ActionUtil;
 import isometricvoxels.engine.util.ModUtil;
 import isometricvoxels.engine.voxel.world.VoxelWorld;
 
+
 /**
  * `PlayState` is the main `FlxState` used in the engine.
  * This state provides a `VoxelWorld` object and some debug info about the `VoxelWorld`.
@@ -31,7 +32,7 @@ class PlayState extends FlxState {
 
 	override public function create() {
 		// INIT
-		ModUtil.init();	
+		ModUtil.loadAllMods();
 		ActionUtil.init();
 		FlxG.mouse.visible = false;
 

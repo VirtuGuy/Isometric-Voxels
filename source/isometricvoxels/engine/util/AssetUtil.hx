@@ -19,7 +19,11 @@ class AssetUtil {
      * @return The image graphic asset.
     **/
     inline static public function getImage(key:String):FlxGraphicAsset {
-        return Assets.getBitmapData('assets/images/$key.png');
+        var path:String = 'assets/images/$key.png';
+        if (exists(path))
+            return Assets.getBitmapData(path);
+        else
+            return null;
     }
 
     /**
@@ -30,7 +34,11 @@ class AssetUtil {
      * @return The sound asset.
     **/
     inline static public function getSound(key:String):FlxSoundAsset {
-        return Assets.getSound('assets/sounds/$key.wav');
+        var path:String = 'assets/sounds/$key.wav';
+        if (exists(path))
+            return Assets.getSound(path);
+        else
+            return null;
     }
 
     /**

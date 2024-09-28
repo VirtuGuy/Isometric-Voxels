@@ -49,8 +49,7 @@ class VoxelGrid extends FlxTypedGroup<Voxel> {
         this.tileZ = tileZ;
         this.gridWidth = Std.int(Math.abs(gridWidth));
         this.gridLength = Std.int(Math.abs(gridLength));
-
-        active = false;
+        this.active = false;
     }
 
     /**
@@ -58,11 +57,7 @@ class VoxelGrid extends FlxTypedGroup<Voxel> {
     **/
     public function reloadGrid() {
         // Clears the grid
-        for (voxel in members) {
-            voxel.kill();
-            voxel.destroy();
-        }
-        clear();
+        VoxelUtil.clearVoxelsInGroup(this);
 
         // GRID VOXEL CREATION
         for (w in 0...gridWidth) {

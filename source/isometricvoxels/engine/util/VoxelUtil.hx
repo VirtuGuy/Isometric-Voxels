@@ -19,4 +19,15 @@ class VoxelUtil {
         group.sort((i, voxel1, voxel2) -> return FlxSort.byValues(i, voxel1.tileY, voxel2.tileY), FlxSort.DESCENDING);
         group.sort((i, voxel1, voxel2) -> return FlxSort.byValues(i, voxel1.tileZ, voxel2.tileZ), FlxSort.DESCENDING);
     }
+
+    /**
+     * Completely removes all voxels in a group. This fully kills the voxels and destroys them.
+    **/
+    static public function clearVoxelsInGroup(group:FlxTypedGroup<Voxel>) {
+        for (voxel in group) {
+            voxel.kill();
+            voxel.destroy();
+        }
+        group.clear();
+    }
 }

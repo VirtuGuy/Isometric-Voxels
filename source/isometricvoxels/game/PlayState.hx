@@ -34,7 +34,7 @@ class PlayState extends FlxState {
 		FlxG.mouse.visible = false;
 
 		// VOXEL WORLD
-		world = new VoxelWorld(0, 5, 5, 5);
+		world = new VoxelWorld();
 		add(world);
 
 		// CAMERA
@@ -56,7 +56,7 @@ class PlayState extends FlxState {
 		var placeX:Float = world.placeVoxel.tileX - world.worldX;
 		var placeY:Float = world.placeVoxel.tileY - world.worldY;
 		var placeZ:Float = world.placeVoxel.tileZ - world.worldZ;
-		debugInfo.text = 'Position:\nX: $placeX\nY: $placeY\nZ: $placeZ';
+		debugInfo.text = 'Position:\nX: $placeX\nY: $placeY\nZ: $placeZ\n\nZoom: ${world.camZoom}';
 		debugInfo.x = FlxG.width - debugInfo.width;
 
 		super.update(elapsed);

@@ -9,6 +9,7 @@ import flixel.util.FlxColor;
 import isometricvoxels.engine.util.ActionUtil;
 import isometricvoxels.engine.util.AssetUtil;
 import isometricvoxels.engine.util.Constants;
+import isometricvoxels.engine.util.MathUtil;
 import isometricvoxels.engine.util.VoxelUtil;
 
 /**
@@ -52,6 +53,27 @@ class VoxelWorld extends FlxGroup {
     public var curTile:Int = 0;
 
     /**
+     * The intended zoom value of the `VoxelWorld` camera.
+    **/
+    public var camZoom:Float = 1;
+
+    /**
+     * The minimum zoom the `VoxelWorld` camera can be at.
+    **/
+    public var minZoom:Float = 1;
+
+    /**
+     * The maximum zoom the `VoxelWorld` camera can be at.
+    **/
+    public var maxZoom:Float = 1.5;
+
+    /**
+     * Whether you want the `VoxelWorld` camera zoom value to use linear interpolation for zooming.
+     * This will make zooming in and out look fancier.
+    **/
+    public var lerpZoom:Bool = true;
+
+    /**
      * The world X position in tiles.
     **/
     public var worldX(default, set):Float = 5;
@@ -93,6 +115,11 @@ class VoxelWorld extends FlxGroup {
     **/
     public var canRemove(default, set):Bool = true;
 
+    /**
+     * The color that the voxels will appear as. This does not affect the grid.
+    **/
+    public var lightColor(default, set):FlxColor = 0xFFFFFFFF;
+
 
     /**
      * If the `VoxelWorld` supports building and removing voxels.
@@ -110,7 +137,7 @@ class VoxelWorld extends FlxGroup {
      * @param bgColor The `FlxColor` used for the `worldCam` background color.
     **/
     override public function new(worldZ:Float = 0, worldWidth:Int = 5, worldHeight:Int = 5,
-    worldLength:Int = 5, bgColor:FlxColor = 0xFF64B4FF) {
+    worldLength:Int = 5, bgColor:FlxColor = 0xFF64B4FF, lightColor:FlxColor = 0xFFFFFFFF) {
         super();
         this.worldX = Constants.WINDOW_TILE_WIDTH - worldWidth;
         this.worldY = Constants.WINDOW_TILE_HEIGHT + 1;
@@ -118,6 +145,7 @@ class VoxelWorld extends FlxGroup {
         this.worldWidth = worldWidth;
         this.worldHeight = worldHeight;
         this.worldLength = worldLength;
+        this.lightColor = lightColor;
 
         // TILE LIST
         var listPath:String = AssetUtil.getDataFile('tilesList.txt');
@@ -146,6 +174,7 @@ class VoxelWorld extends FlxGroup {
         placeVoxel = new Voxel(worldX, worldY, worldZ, tiles[curTile]);
         placeVoxel.alpha = 0.5;
         placeVoxel.cameras = [worldCam];
+        placeVoxel.color = lightColor;
         add(placeVoxel);
     }
 
@@ -171,13 +200,27 @@ class VoxelWorld extends FlxGroup {
         var removeKey:Bool = ActionUtil.instance.REMOVE;
         var clearKey:Bool = ActionUtil.instance.CLEAR;
 
-        // TILE SELECTION
-        if (FlxG.mouse.wheel != 0 && hasBuilding) {
-            curTile += FlxG.mouse.wheel;
-            if (curTile < 0) curTile = tiles.length - 1;
-            if (curTile >= tiles.length) curTile = 0;
-            placeVoxel.tileName = tiles[curTile];
+        // TILE SELECTION AND CAMERA ZOOMING
+        if (FlxG.mouse.wheel != 0) {
+            if (hasBuilding && !FlxG.keys.pressed.CONTROL) {
+                curTile += FlxG.mouse.wheel;
+                if (curTile < 0) curTile = tiles.length - 1;
+                if (curTile >= tiles.length) curTile = 0;
+                placeVoxel.tileName = tiles[curTile];
+            } else {
+                camZoom += FlxG.mouse.wheel * 0.1;
+                if (camZoom < minZoom)
+                    camZoom = minZoom;
+                else if (camZoom > maxZoom)
+                    camZoom = maxZoom;
+            }
         }
+
+        // CAMERA ZOOM
+        var zoomValue:Float = camZoom;
+        if (lerpZoom)
+            zoomValue = MathUtil.lerp(worldCam.zoom, camZoom, 0.1);
+        worldCam.zoom = zoomValue;
 
         // PLACE VOXEL MOVEMENT
         if (hasBuilding) {
@@ -255,10 +298,10 @@ class VoxelWorld extends FlxGroup {
                 if (voxel.hasDirections)
                     voxel.direction = placeVoxel.direction;
             }
-        }
-        else if (tileName != '') {
-            // Creates a new voxel is tileName isn't an empty string value
+        } else if (tileName != '') {
+            // Creates a new voxel if tileName isn't an empty string value
             var voxel:Voxel = new Voxel(tileX, tileY, tileZ, tileName);
+            voxel.color = lightColor;
             if (voxel.hasDirections)
                 voxel.direction = placeVoxel.direction;
             voxels.add(voxel);
@@ -305,11 +348,7 @@ class VoxelWorld extends FlxGroup {
             FlxG.sound.play(AssetUtil.getSound('clear'));
 
         // Removes the voxels
-        for (voxel in voxels) {
-            voxel.kill();
-            voxel.destroy();
-        }
-        voxels.clear();
+        VoxelUtil.clearVoxelsInGroup(voxels);
     }
 
 
@@ -397,6 +436,20 @@ class VoxelWorld extends FlxGroup {
             placeVoxel.active = hasBuilding;
             placeVoxel.visible = hasBuilding;
         }
+        return value;
+    }
+
+    private function set_lightColor(value:FlxColor):FlxColor {
+        this.lightColor = value;
+
+        // Sets the color of the voxels
+        if (voxels != null) {
+            for (voxel in voxels)
+                voxel.color = value;
+        }
+        if (placeVoxel != null)
+            placeVoxel.color = value;
+
         return value;
     }
 

@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import isometricvoxels.engine.util.ActionUtil;
+import isometricvoxels.engine.util.ModUtil;
 import isometricvoxels.engine.voxel.world.VoxelWorld;
 
 /**
@@ -30,6 +31,7 @@ class PlayState extends FlxState {
 
 	override public function create() {
 		// INIT
+		ModUtil.init();	
 		ActionUtil.init();
 		FlxG.mouse.visible = false;
 

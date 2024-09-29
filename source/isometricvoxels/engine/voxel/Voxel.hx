@@ -124,6 +124,9 @@ class Voxel extends FlxSprite {
                 directional: false
             }
 
+        // Clears the cache
+        AssetUtil.clearCache();
+
         // Loads the tile graphic
         loadGraphic(AssetUtil.getImage('tiles/$value'), hasDirections, Std.int(Constants.TILE_SIZE / 2), 0);
 

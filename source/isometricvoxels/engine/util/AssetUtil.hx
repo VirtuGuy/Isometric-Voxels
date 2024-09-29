@@ -2,6 +2,7 @@ package isometricvoxels.engine.util;
 
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.system.FlxAssets.FlxSoundAsset;
+import openfl.system.System;
 import openfl.utils.Assets;
 
 using StringTools;
@@ -61,6 +62,14 @@ class AssetUtil {
         if (exists(path))
             content = Assets.getText(path);
         return content;
+    }
+
+    /**
+     * Clears the asset cache from memory.
+    **/
+    static public function clearCache() {
+        Assets.cache.clear();
+        System.gc();
     }
 
     /**

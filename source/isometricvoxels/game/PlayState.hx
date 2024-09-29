@@ -60,7 +60,7 @@ class PlayState extends FlxState {
 		var placeX:Float = world.placeVoxel.tileX - world.worldX;
 		var placeY:Float = world.placeVoxel.tileY - world.worldY;
 		var placeZ:Float = world.placeVoxel.tileZ - world.worldZ;
-		debugInfo.text = 'Position:\nX: $placeX\nY: $placeY\nZ: $placeZ\n\nZoom: ${world.camZoom}';
+		debugInfo.text = 'Position:\nX: $placeX\nY: $placeY\nZ: $placeZ\nTile: ${world.tiles[world.curTile]}\n\nZoom: ${world.camZoom}';
 		debugInfo.x = FlxG.width - debugInfo.width;
 
 		super.update(elapsed);

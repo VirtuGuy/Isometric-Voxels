@@ -263,8 +263,12 @@ class VoxelWorld extends FlxGroup {
             dir *= elapsed * 2;
             worldCamObject.y += dir;
         }
-        if (camReset)
+
+        // CAMERA RESET
+        if (camReset) {
             worldCamObject.screenCenter();
+            camZoom = 1;
+        }
 
         super.update(elapsed);
     }

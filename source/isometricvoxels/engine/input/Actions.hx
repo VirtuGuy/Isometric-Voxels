@@ -12,7 +12,7 @@ class Actions extends FlxActionSet {
     /**
      * An instance of `Actions` that can be used throughout the engine.
     **/
-    static public var instance(get, null):Actions;
+    static public var instance:Actions;
 
     // ACTIONS
     static var _move_left = new FlxActionDigital('move_left');
@@ -96,6 +96,14 @@ class Actions extends FlxActionSet {
     }
 
     /**
+     * Initializes the actions set.
+    **/
+    static public function init() {
+        if (instance != null) return;
+        instance = new Actions();
+    }
+
+    /**
      * Binds a list of keyboard keys to an action.
      *
      * @param action The action you want the keys binded to.
@@ -117,10 +125,5 @@ class Actions extends FlxActionSet {
     static public function clearAction(action:FlxActionDigital) {
         if (action == null) return;
         action.removeAll();
-    }
-
-
-    static function get_instance():Actions {
-        return instance ?? new Actions();
     }
 }

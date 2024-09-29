@@ -6,7 +6,7 @@ import flixel.FlxObject;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
-import isometricvoxels.engine.util.ActionUtil;
+import isometricvoxels.engine.input.Actions;
 import isometricvoxels.engine.util.AssetUtil;
 import isometricvoxels.engine.util.Constants;
 import isometricvoxels.engine.util.MathUtil;
@@ -180,25 +180,25 @@ class VoxelWorld extends FlxGroup {
 
     override public function update(elapsed:Float) {
         // MOVE KEYS
-        var moveLeft:Bool = ActionUtil.instance.MOVE_LEFT;
-        var moveRight:Bool = ActionUtil.instance.MOVE_RIGHT;
-        var moveUp:Bool = ActionUtil.instance.MOVE_UP;
-        var moveDown:Bool = ActionUtil.instance.MOVE_DOWN;
-        var layerUp:Bool = ActionUtil.instance.LAYER_UP;
-        var layerDown:Bool = ActionUtil.instance.LAYER_DOWN;
-        var rotate:Bool = ActionUtil.instance.ROTATE;
+        var moveLeft:Bool = Actions.instance.MOVE_LEFT;
+        var moveRight:Bool = Actions.instance.MOVE_RIGHT;
+        var moveUp:Bool = Actions.instance.MOVE_UP;
+        var moveDown:Bool = Actions.instance.MOVE_DOWN;
+        var layerUp:Bool = Actions.instance.LAYER_UP;
+        var layerDown:Bool = Actions.instance.LAYER_DOWN;
+        var rotate:Bool = Actions.instance.BUTTON_A && !FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT;
 
         // CAMERA KEYS
-        var camLeft:Bool = ActionUtil.instance.CAM_LEFT;
-        var camRight:Bool = ActionUtil.instance.CAM_RIGHT;
-        var camUp:Bool = ActionUtil.instance.CAM_UP;
-        var camDown:Bool = ActionUtil.instance.CAM_DOWN;
-        var camReset:Bool = ActionUtil.instance.CAM_RESET;
+        var camLeft:Bool = Actions.instance.CAM_LEFT;
+        var camRight:Bool = Actions.instance.CAM_RIGHT;
+        var camUp:Bool = Actions.instance.CAM_UP;
+        var camDown:Bool = Actions.instance.CAM_DOWN;
+        var camReset:Bool = Actions.instance.BUTTON_A && !FlxG.keys.pressed.CONTROL && FlxG.keys.pressed.ALT;
 
         // PLACEMENT KEYS
-        var placeKey:Bool = ActionUtil.instance.PLACE;
-        var removeKey:Bool = ActionUtil.instance.REMOVE;
-        var clearKey:Bool = ActionUtil.instance.CLEAR;
+        var placeKey:Bool = Actions.instance.PLACE;
+        var removeKey:Bool = Actions.instance.REMOVE;
+        var clearKey:Bool = Actions.instance.BUTTON_A && FlxG.keys.pressed.CONTROL && !FlxG.keys.pressed.ALT;
 
         // TILE SELECTION AND CAMERA ZOOMING
         if (FlxG.mouse.wheel != 0) {

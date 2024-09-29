@@ -1,4 +1,4 @@
-package isometricvoxels.engine.util;
+package isometricvoxels.engine.modding;
 
 #if (MODDING && polymod)
 import polymod.Polymod;
@@ -6,9 +6,9 @@ import polymod.Polymod;
 
 
 /**
- * A utility class for handling mod support. `ModUtil` is only compatible for desktop!
+ * A class for handling mod support.
 **/
-class ModUtil {
+class ModHandler {
     /**
      * The directory where mod folders can be located.
     **/

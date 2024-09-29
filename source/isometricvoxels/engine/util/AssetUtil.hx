@@ -53,6 +53,18 @@ class AssetUtil {
         return 'assets/data/$key';
     }
 
+    /**
+     * Gets the path to a `.hx` file in the `scripts` folder.
+     * Although there's no `scripts` folder in the game's assets, a `scripts` folder can be added to mods.
+     *
+     * @param key The key name of the script.
+     *
+     * @return The path to the script.
+    **/
+    inline static public function getScript(key:String):String {
+        return 'assets/scripts/$key.hx';
+    }
+
 
     /**
      * @return The text content of a file from `path`.

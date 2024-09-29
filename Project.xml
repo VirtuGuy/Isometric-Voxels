@@ -47,8 +47,11 @@
 
 	<haxelib name="flixel" />
 	<haxelib name="polymod" if="MODDING" />
+	<haxelib name="hscript" if="MODDING" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
+
+	<haxedef name="hscriptPos" value="true" />
 
 	<!--Remove the legacy health system-->
 	<haxedef name="FLX_NO_HEALTH" />

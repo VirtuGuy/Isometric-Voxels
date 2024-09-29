@@ -5,7 +5,8 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import isometricvoxels.engine.input.Actions;
-import isometricvoxels.engine.util.ModUtil;
+import isometricvoxels.engine.modding.HScriptHandler;
+import isometricvoxels.engine.modding.ModHandler;
 import isometricvoxels.engine.voxel.world.VoxelWorld;
 
 
@@ -29,10 +30,15 @@ class PlayState extends FlxState {
 	**/
 	public var hudCam:FlxCamera;
 
+	/**
+	 * An HScriptHandler used for the state.
+	**/
+	public var script:HScriptHandler;
+
 
 	override public function create() {
 		// INIT
-		ModUtil.loadAllMods();
+		ModHandler.loadAllMods();
 		Actions.init();
 		FlxG.mouse.visible = false;
 		FlxG.stage.showDefaultContextMenu = false;
@@ -52,7 +58,15 @@ class PlayState extends FlxState {
 		debugInfo.cameras = [hudCam];
 		add(debugInfo);
 
+		// HSCRIPT
+		script = new HScriptHandler('play', 'PlayState', false);
+		script.interp.variables.set('game', this);
+		script.execute();
+
 		super.create();
+
+		// Calls the script's create function
+		script.call('onCreate');
 	}
 
 	override public function update(elapsed:Float) {
@@ -64,10 +78,19 @@ class PlayState extends FlxState {
 		debugInfo.x = FlxG.width - debugInfo.width;
 
 		super.update(elapsed);
+
+		// Calls the script's update function
+		script.call('onUpdate', [elapsed]);
 	}
 
 	override public function destroy() {
 		super.destroy();
+
+		// Removes the HUD camera
 		FlxG.cameras.remove(hudCam);
+
+		// Does final HScript stuff
+		script.call('onDestroy');
+		HScriptHandler.removeInstance(script.id);
 	}
 }

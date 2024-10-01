@@ -69,7 +69,7 @@ class PlayState extends FlxState {
 
 		// HSCRIPT
 		script = new HScriptHandler('play', 'PlayState', false);
-		script.interp.variables.set('game', this);
+		script.setVar('game', this);
 		script.execute();
 
 		super.create();

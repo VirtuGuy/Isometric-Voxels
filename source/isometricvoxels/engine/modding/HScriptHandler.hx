@@ -106,33 +106,43 @@ class HScriptHandler {
     }
 
     /**
+     * Defines a variable to to the interpreter.
+    **/
+    public function setVar(key:String, value:Dynamic) {
+        #if (MODDING && hscript)
+        if (interp != null)
+            interp.variables.set(key, value);
+        #end
+    }
+
+    /**
      * Defines the variables that the interpreter can understand.
     **/
     public function defineVars() {
         #if (MODDING && hscript)
         if (interp != null) {
             // Misc
-            interp.variables.set('Math', Math);
+            setVar('Math', Math);
 
             // Flixel
-            interp.variables.set('FlxG', flixel.FlxG);
-            interp.variables.set('FlxMath', flixel.math.FlxMath);
-            interp.variables.set('FlxSprite', flixel.FlxSprite);
-            interp.variables.set('FlxObject', flixel.FlxObject);
-            interp.variables.set('FlxState', flixel.FlxState);
+            setVar('FlxG', flixel.FlxG);
+            setVar('FlxMath', flixel.math.FlxMath);
+            setVar('FlxSprite', flixel.FlxSprite);
+            setVar('FlxObject', flixel.FlxObject);
+            setVar('FlxState', flixel.FlxState);
 
             // Isometric Voxels
-            interp.variables.set('Voxel', isometricvoxels.engine.voxel.Voxel);
-            interp.variables.set('VoxelGrid', isometricvoxels.engine.voxel.world.VoxelGrid);
-            interp.variables.set('VoxelWorld', isometricvoxels.engine.voxel.world.VoxelWorld);
-            interp.variables.set('AssetUtil', isometricvoxels.engine.util.AssetUtil);
-            interp.variables.set('MathUtil', isometricvoxels.engine.util.MathUtil);
-            interp.variables.set('VoxelUtil', isometricvoxels.engine.util.VoxelUtil);
-            interp.variables.set('Constants', isometricvoxels.engine.util.Constants);
-            interp.variables.set('Actions', isometricvoxels.engine.input.Actions);
-            interp.variables.set('HScriptHandler', isometricvoxels.engine.modding.HScriptHandler);
-            interp.variables.set('ModHandler', isometricvoxels.engine.modding.ModHandler);
-            interp.variables.set('PlayState', isometricvoxels.game.PlayState);
+            setVar('Voxel', isometricvoxels.engine.voxel.Voxel);
+            setVar('VoxelGrid', isometricvoxels.engine.voxel.world.VoxelGrid);
+            setVar('VoxelWorld', isometricvoxels.engine.voxel.world.VoxelWorld);
+            setVar('AssetUtil', isometricvoxels.engine.util.AssetUtil);
+            setVar('MathUtil', isometricvoxels.engine.util.MathUtil);
+            setVar('VoxelUtil', isometricvoxels.engine.util.VoxelUtil);
+            setVar('Constants', isometricvoxels.engine.util.Constants);
+            setVar('Actions', isometricvoxels.engine.input.Actions);
+            setVar('HScriptHandler', isometricvoxels.engine.modding.HScriptHandler);
+            setVar('ModHandler', isometricvoxels.engine.modding.ModHandler);
+            setVar('PlayState', isometricvoxels.game.PlayState);
         }
         #end
     }
@@ -143,9 +153,17 @@ class HScriptHandler {
     public function defineFuncs() {
         #if (MODDING && hscript)
         if (interp != null) {
-            interp.variables.set('onCreate', function() {});
-            interp.variables.set('onUpdate', function(elapsed:Float) {});
-            interp.variables.set('onDestroy', function() {});
+            // CALLBACKS
+            setVar('onCreate', function() {});
+            setVar('onUpdate', function(elapsed:Float) {});
+            setVar('onDestroy', function() {});
+
+            // FUNCTIONS
+            setVar('import', function(libPath:String) {
+                var splitPath:Array<String> = libPath.split('.');
+                var libName = splitPath[splitPath.length - 1];
+                setVar(libName, Type.resolveClass(libPath));
+            });
         }
         #end
     }

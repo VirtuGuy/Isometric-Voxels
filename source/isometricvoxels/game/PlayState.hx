@@ -4,6 +4,7 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.text.FlxText;
+import flixel.util.FlxColor;
 import isometricvoxels.engine.input.Actions;
 import isometricvoxels.engine.modding.HScriptHandler;
 import isometricvoxels.engine.modding.ModHandler;
@@ -44,7 +45,15 @@ class PlayState extends FlxState {
 		FlxG.stage.showDefaultContextMenu = false;
 
 		// VOXEL WORLD
-		world = new VoxelWorld();
+		var bgColor:FlxColor = 0xFF64B4FF;
+		var date:Date = Date.now();
+		
+		// Halloween BG color
+		#if HALLOWEEN_CONTENT
+		if (date.getMonth() == 9) // October
+			bgColor = 0xFFFA9C4F;
+		#end
+		world = new VoxelWorld(0, 5, 5, 5, bgColor);
 		add(world);
 
 		// CAMERA

@@ -105,11 +105,11 @@ class HScriptHandler {
         #end
     }
 
-    #if (MODDING && hscript)
     /**
      * Defines the variables that the interpreter can understand.
     **/
     public function defineVars() {
+        #if (MODDING && hscript)
         if (interp != null) {
             // Misc
             interp.variables.set('Math', Math);
@@ -134,17 +134,20 @@ class HScriptHandler {
             interp.variables.set('ModHandler', isometricvoxels.engine.modding.ModHandler);
             interp.variables.set('PlayState', isometricvoxels.game.PlayState);
         }
+        #end
     }
 
     /**
      * Defines functions that the interpreter can understand.
     **/
     public function defineFuncs() {
+        #if (MODDING && hscript)
         if (interp != null) {
             interp.variables.set('onCreate', function() {});
             interp.variables.set('onUpdate', function(elapsed:Float) {});
             interp.variables.set('onDestroy', function() {});
         }
+        #end
     }
 
     /**
@@ -154,16 +157,19 @@ class HScriptHandler {
      * @param args A list of arguments for the function.
     **/
     public function call(func:String, ?args:Array<Dynamic>) {
+        #if (MODDING && hscript)
         if (interp != null && interp.variables.exists(func))
             Reflect.callMethod(null, interp.variables.get(func), args?.copy() ?? []);
+        #end
     }
 
     /**
      * Executes the script and runs the code in it.
     **/
     public function execute() {
+        #if (MODDING && hscript)
         if (interp != null && program != null)
             interp.execute(program);
+        #end
     }
-    #end
 }

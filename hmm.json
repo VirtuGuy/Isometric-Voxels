@@ -35,11 +35,6 @@
       "version": null
     },
     {
-      "name": "list",
-      "type": "haxelib",
-      "version": null
-    },
-    {
       "name": "openfl",
       "type": "haxelib",
       "version": null

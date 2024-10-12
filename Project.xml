@@ -30,7 +30,7 @@
 	<!-- _________________________________Defines___________________________________ -->
 
 	<define name="MODDING" if="desktop" />
-	<define name="HALLOWEEN_CONTENT" />
+	<define name="HOLIDAY_THEMES" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
@@ -48,11 +48,8 @@
 
 	<haxelib name="flixel" />
 	<haxelib name="polymod" if="MODDING" />
-	<haxelib name="hscript" if="MODDING" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
-
-	<haxedef name="hscriptPos" value="true" />
 
 	<!--Remove the legacy health system-->
 	<haxedef name="FLX_NO_HEALTH" />

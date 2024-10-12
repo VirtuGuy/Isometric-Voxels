@@ -6,7 +6,6 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import isometricvoxels.engine.input.Actions;
-import isometricvoxels.engine.modding.HScriptHandler;
 import isometricvoxels.engine.modding.ModHandler;
 import isometricvoxels.engine.voxel.world.VoxelWorld;
 
@@ -31,11 +30,6 @@ class PlayState extends FlxState {
 	**/
 	public var hudCam:FlxCamera;
 
-	/**
-	 * An HScriptHandler used for the state.
-	**/
-	public var script:HScriptHandler;
-
 
 	override public function create() {
 		// INIT
@@ -49,8 +43,8 @@ class PlayState extends FlxState {
 		var date:Date = Date.now();
 		
 		// Halloween BG color
-		#if HALLOWEEN_CONTENT
-		if (date.getMonth() == 9) // October
+		#if HOLIDAY_THEMES
+		if (date.getMonth() == 9 && date.getDate() == 31) // Halloween
 			bgColor = 0xFFFA9C4F;
 		#end
 		world = new VoxelWorld(0, 5, 5, 5, bgColor);
@@ -67,15 +61,7 @@ class PlayState extends FlxState {
 		debugInfo.cameras = [hudCam];
 		add(debugInfo);
 
-		// HSCRIPT
-		script = new HScriptHandler('play', 'PlayState', false);
-		script.setVar('game', this);
-		script.execute();
-
 		super.create();
-
-		// Calls the script's create function
-		script.call('onCreate');
 	}
 
 	override public function update(elapsed:Float) {
@@ -87,9 +73,6 @@ class PlayState extends FlxState {
 		debugInfo.x = FlxG.width - debugInfo.width;
 
 		super.update(elapsed);
-
-		// Calls the script's update function
-		script.call('onUpdate', [elapsed]);
 	}
 
 	override public function destroy() {
@@ -97,9 +80,5 @@ class PlayState extends FlxState {
 
 		// Removes the HUD camera
 		FlxG.cameras.remove(hudCam);
-
-		// Does final HScript stuff
-		script.call('onDestroy');
-		HScriptHandler.removeInstance(script.id);
 	}
 }

@@ -1,4 +1,4 @@
-package isometricvoxels.engine.modding;
+package isometricvoxels.game.modding;
 
 #if (MODDING && polymod)
 import polymod.Polymod;

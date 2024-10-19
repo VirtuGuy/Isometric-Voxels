@@ -1,43 +1,32 @@
 package isometricvoxels.game;
 
-import flixel.FlxCamera;
 import flixel.FlxG;
-import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import isometricvoxels.engine.input.Actions;
-import isometricvoxels.engine.modding.ModHandler;
 import isometricvoxels.engine.voxel.world.VoxelWorld;
+import isometricvoxels.game.ui.GameState;
+import isometricvoxels.game.ui.WorldPrompt;
 
 
 /**
- * `PlayState` is the main `FlxState` used in the engine.
+ * `PlayState` is the main `GameState` used in the engine.
  * This state provides a `VoxelWorld` object and some debug info about the `VoxelWorld`.
 **/
-class PlayState extends FlxState {
+class PlayState extends GameState {
 	/**
 	 * The main `VoxelWorld` used in the state.
 	**/
 	public var world:VoxelWorld;
 
+	#if DEBUG_INFO
 	/**
 	 * `FlxText` that shows debugging info such as world place voxel position.
 	**/
 	public var debugInfo:FlxText;
-
-	/**
-	 * An `FlxCamera` used for displaying UI.
-	**/
-	public var hudCam:FlxCamera;
+	#end
 
 
 	override public function create() {
-		// INIT
-		ModHandler.loadAllMods();
-		Actions.init();
-		FlxG.mouse.visible = false;
-		FlxG.stage.showDefaultContextMenu = false;
-
 		// VOXEL WORLD
 		var bgColor:FlxColor = 0xFF64B4FF;
 		var date:Date = Date.now();
@@ -48,37 +37,49 @@ class PlayState extends FlxState {
 			bgColor = 0xFFFA9C4F;
 		#end
 		world = new VoxelWorld(0, 5, 5, 5, bgColor);
+		world.active = false;
 		add(world);
 
-		// CAMERA
-		hudCam = new FlxCamera();
-		hudCam.bgColor.alpha = 0;
-		FlxG.cameras.add(hudCam, false);
-
 		// DEBUG INFO
+		#if DEBUG_INFO
 		debugInfo = new FlxText(0, 16, 0, '', 18);
 		debugInfo.alignment = RIGHT;
 		debugInfo.cameras = [hudCam];
+		debugInfo.active = false;
 		add(debugInfo);
+		#end
+
+		// PROMPT
+		var prompt:WorldPrompt = new WorldPrompt();
+		showPrompt(prompt);
+
+		// Prompt button pressed
+		prompt.onButtonPressed = (id:Int) -> {
+			prompt.close();
+
+			// Sets the voxel world size
+			world.worldWidth = Std.int(prompt.widthStepper.value);
+			world.worldHeight = Std.int(prompt.heightStepper.value);
+			world.worldLength = Std.int(prompt.lengthStepper.value);
+			world.active = true;
+
+			// Makes the mouse visible
+			FlxG.mouse.visible = false;
+		}
 
 		super.create();
 	}
 
 	override public function update(elapsed:Float) {
 		// DEBUG INFO
+		#if DEBUG_INFO
 		var placeX:Float = world.placeVoxel.tileX - world.worldX;
 		var placeY:Float = world.placeVoxel.tileY - world.worldY;
 		var placeZ:Float = world.placeVoxel.tileZ - world.worldZ;
 		debugInfo.text = 'Position:\nX: $placeX\nY: $placeY\nZ: $placeZ\nTile: ${world.tiles[world.curTile]}\n\nZoom: ${world.camZoom}';
 		debugInfo.x = FlxG.width - debugInfo.width;
+		#end
 
 		super.update(elapsed);
-	}
-
-	override public function destroy() {
-		super.destroy();
-
-		// Removes the HUD camera
-		FlxG.cameras.remove(hudCam);
 	}
 }

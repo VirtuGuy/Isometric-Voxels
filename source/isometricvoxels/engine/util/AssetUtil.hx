@@ -1,5 +1,6 @@
 package isometricvoxels.engine.util;
 
+import flixel.FlxG;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.system.FlxAssets.FlxSoundAsset;
 import openfl.system.System;
@@ -68,6 +69,7 @@ class AssetUtil {
      * Clears the asset cache from memory.
     **/
     static public function clearCache() {
+        FlxG.bitmap.dumpCache();
         Assets.cache.clear();
         System.gc();
     }

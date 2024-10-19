@@ -81,8 +81,9 @@ class Voxel extends FlxSprite {
      * @param tileZ The Z position in tiles.
     **/
     public function setIsometricPosition(tileX:Float = 0, tileY:Float = 0, tileZ:Float = 0) {
-        x = (tileX * frameWidth) + (tileZ * frameWidth);
-        y = (frameWidth / 2 * tileX) + (frameWidth * tileY - (frameWidth / 2 * tileZ));
+        var w:Float = Constants.TILE_SIZE / 2;
+        x = (tileX * w) + (tileZ * w);
+        y = (w / 2 * tileX) + (w * tileY - (w / 2 * tileZ));
     }
 
     override public function draw() {

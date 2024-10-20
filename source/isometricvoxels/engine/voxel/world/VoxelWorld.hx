@@ -202,13 +202,18 @@ class VoxelWorld extends FlxGroup {
 
         // TILE SELECTION AND CAMERA ZOOMING
         if (FlxG.mouse.wheel != 0) {
+            var scroll:Int = FlxG.mouse.wheel;
+            #if web
+            scroll = Math.floor(scroll / 125);
+            #end
+
             if (hasBuilding && !FlxG.keys.pressed.CONTROL) {
-                curTile += FlxG.mouse.wheel;
+                curTile += scroll;
                 if (curTile < 0) curTile = tiles.length - 1;
                 if (curTile >= tiles.length) curTile = 0;
                 placeVoxel.tileName = tiles[curTile];
             } else {
-                camZoom += FlxG.mouse.wheel * 0.1;
+                camZoom += scroll * 0.1;
                 if (camZoom < minZoom)
                     camZoom = minZoom;
                 else if (camZoom > maxZoom)
@@ -456,7 +461,6 @@ class VoxelWorld extends FlxGroup {
 
         return value;
     }
-
 
     private function get_hasBuilding():Bool {
         return canPlace || canRemove;

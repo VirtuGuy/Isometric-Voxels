@@ -10,17 +10,17 @@ class VoxelGrid extends FlxTypedGroup<Voxel> {
     /**
      * The X position offset in tiles.
     **/
-    public var tileX(default, set):Float = 0;
+    public var tileX(default, set):Int = 0;
 
     /**
      * The Y position offset in tiles.
     **/
-    public var tileY(default, set):Float = 0;
+    public var tileY(default, set):Int = 0;
 
     /**
      * The Z position offset in tiles.
     **/
-    public var tileZ(default, set):Float = 0;
+    public var tileZ(default, set):Int = 0;
 
     /**
      * The width of the `Grid` object in tiles.
@@ -42,7 +42,7 @@ class VoxelGrid extends FlxTypedGroup<Voxel> {
      * @param gridWidth How many voxels there should be on the X axis.
      * @param gridHeight How many voxels there should be on the Z axis.
     **/
-    override public function new(tileX:Float = 0, tileY:Float = 0, tileZ:Float = 0, gridWidth:Int = 5, gridLength:Int = 5) {
+    override public function new(tileX:Int = 0, tileY:Int = 0, tileZ:Int = 0, gridWidth:Int = 5, gridLength:Int = 5) {
         super();
         this.tileX = tileX;
         this.tileY = tileY;
@@ -72,19 +72,19 @@ class VoxelGrid extends FlxTypedGroup<Voxel> {
     }
 
 
-    private function set_tileX(value:Float):Float {
+    private function set_tileX(value:Int):Int {
         this.tileX = value;
         reloadGrid();
         return value;
     }
 
-    private function set_tileY(value:Float):Float {
+    private function set_tileY(value:Int):Int {
         this.tileY = value;
         reloadGrid();
         return value;
     }
 
-    private function set_tileZ(value:Float):Float {
+    private function set_tileZ(value:Int):Int {
         this.tileZ = value;
         reloadGrid();
         return value;

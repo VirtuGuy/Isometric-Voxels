@@ -15,17 +15,17 @@ class Voxel extends FlxSprite {
     /**
      * The X position in tiles.
     **/
-    public var tileX(default, set):Float;
+    public var tileX(default, set):Int;
 
     /**
      * The Y position in tiles.
     **/
-    public var tileY(default, set):Float;
+    public var tileY(default, set):Int;
 
     /**
      * The Z position in tiles.
     **/
-    public var tileZ(default, set):Float;
+    public var tileZ(default, set):Int;
 
     /**
      * The name of the image file used for the tile from `assets/images/tiles`.
@@ -65,7 +65,7 @@ class Voxel extends FlxSprite {
      * @param tileZ The initial Z position in tiles.
      * @param tileName The name of the image file that should be used for the tile from `assets/images/tiles`.
     **/
-    override public function new(tileX:Float = 0, tileY:Float = 0, tileZ:Float = 0, tileName:String = 'tile') {
+    override public function new(tileX:Int = 0, tileY:Int = 0, tileZ:Int = 0, tileName:String = 'tile') {
         super();
         this.tileName = tileName;
         this.tileX = tileX;
@@ -80,7 +80,7 @@ class Voxel extends FlxSprite {
      * @param tileY The Y position in tiles.
      * @param tileZ The Z position in tiles.
     **/
-    public function setIsometricPosition(tileX:Float = 0, tileY:Float = 0, tileZ:Float = 0) {
+    public function setIsometricPosition(tileX:Int = 0, tileY:Int = 0, tileZ:Int = 0) {
         var w:Float = Constants.TILE_SIZE / 2;
         x = (tileX * w) + (tileZ * w);
         y = (w / 2 * tileX) + (w * tileY - (w / 2 * tileZ));
@@ -92,19 +92,19 @@ class Voxel extends FlxSprite {
     }
 
 
-    private function set_tileX(value:Float):Float {
+    private function set_tileX(value:Int):Int {
         this.tileX = value;
         setIsometricPosition(value, tileY, tileZ);
         return value;
     }
 
-    private function set_tileY(value:Float):Float {
+    private function set_tileY(value:Int):Int {
         this.tileY = value;
         setIsometricPosition(tileX, value, tileZ);
         return value;
     }
 
-    private function set_tileZ(value:Float):Float {
+    private function set_tileZ(value:Int):Int {
         this.tileZ = value;
         setIsometricPosition(tileX, tileY, value);
         return value;

@@ -76,17 +76,17 @@ class VoxelWorld extends FlxGroup {
     /**
      * The world X position in tiles.
     **/
-    public var worldX(default, set):Float = 5;
+    public var worldX(default, set):Int = 5;
 
     /**
      * The world Y position in tiles.
     **/
-    public var worldY(default, set):Float = 5;
+    public var worldY(default, set):Int = 5;
 
     /**
      * The world Z position in tiles.
     **/
-    public var worldZ(default, set):Float = 5;
+    public var worldZ(default, set):Int = 5;
 
     /**
      * How many blocks wide the world is.
@@ -136,7 +136,7 @@ class VoxelWorld extends FlxGroup {
      * @param worldLength How many blocks long the world is.
      * @param bgColor The `FlxColor` used for the `worldCam` background color.
     **/
-    override public function new(worldZ:Float = 0, worldWidth:Int = 5, worldHeight:Int = 5,
+    override public function new(worldZ:Int = 0, worldWidth:Int = 5, worldHeight:Int = 5,
     worldLength:Int = 5, bgColor:FlxColor = 0xFF64B4FF, lightColor:FlxColor = 0xFFFFFFFF) {
         super();
         this.worldX = Constants.WINDOW_TILE_WIDTH - worldWidth;
@@ -155,6 +155,7 @@ class VoxelWorld extends FlxGroup {
         // CAMERA
         worldCam = new FlxCamera();
         worldCam.bgColor = bgColor;
+        worldCam.pixelPerfectRender = true;
         FlxG.cameras.add(worldCam, false);
 
         worldCamObject = new FlxObject(0, 0, 50, 50);
@@ -242,9 +243,9 @@ class VoxelWorld extends FlxGroup {
                 FlxG.sound.play(AssetUtil.getSound('move'), 0.6);
 
             // Tile bound
-            placeVoxel.tileX = FlxMath.bound(placeVoxel.tileX, worldX, worldX + (worldWidth - 1));
-            placeVoxel.tileY = FlxMath.bound(placeVoxel.tileY, worldY - (worldHeight - 1), worldY);
-            placeVoxel.tileZ = FlxMath.bound(placeVoxel.tileZ, worldZ, worldZ + (worldLength - 1));
+            placeVoxel.tileX = Std.int(FlxMath.bound(placeVoxel.tileX, worldX, worldX + (worldWidth - 1)));
+            placeVoxel.tileY = Std.int(FlxMath.bound(placeVoxel.tileY, worldY - (worldHeight - 1), worldY));
+            placeVoxel.tileZ = Std.int(FlxMath.bound(placeVoxel.tileZ, worldZ, worldZ + (worldLength - 1)));
     
             // Rotation
             if (rotate && placeVoxel.hasDirections)
@@ -260,12 +261,12 @@ class VoxelWorld extends FlxGroup {
         // CAMERA MOVEMENT
         if (camLeft || camRight) {
             var dir:Float = camLeft ? -100 : 100;
-            dir *= elapsed * 2;
+            dir *= elapsed * 4;
             worldCamObject.x += dir;
         }
         if (camDown || camUp) {
             var dir:Float = camDown ? 100 : -100;
-            dir *= elapsed * 2;
+            dir *= elapsed * 4;
             worldCamObject.y += dir;
         }
 
@@ -275,7 +276,7 @@ class VoxelWorld extends FlxGroup {
             camZoom = 1;
         }
 
-        super.update(elapsed);
+        super.update(elapsed / 2);
     }
 
 
@@ -288,7 +289,7 @@ class VoxelWorld extends FlxGroup {
      * @param tileName The name of the image file used for the tile.
      * If the value is an empty string, the tile in that position will be removed.
     **/
-    public function setVoxel(tileX:Float = 0, tileY:Float = 0, tileZ:Float = 0, tileName:String = 'tile') {
+    public function setVoxel(tileX:Int = 0, tileY:Int = 0, tileZ:Int = 0, tileName:String = 'tile') {
         var voxel:Voxel = getVoxel(tileX, tileY, tileZ);
         var changedVoxel:Bool = true;
         var hasVoxel:Bool = voxel != null;
@@ -380,7 +381,7 @@ class VoxelWorld extends FlxGroup {
     }
 
 
-    private function set_worldX(value:Float):Float {
+    private function set_worldX(value:Int):Int {
         this.worldX = value;
         if (grid != null)
             grid.tileX = value;
@@ -389,7 +390,7 @@ class VoxelWorld extends FlxGroup {
         return value;
     }
 
-    private function set_worldY(value:Float):Float {
+    private function set_worldY(value:Int):Int {
         this.worldY = value;
         if (grid != null)
             grid.tileY = value;
@@ -398,7 +399,7 @@ class VoxelWorld extends FlxGroup {
         return value;
     }
 
-    private function set_worldZ(value:Float):Float {
+    private function set_worldZ(value:Int):Int {
         this.worldZ = value;
         if (grid != null)
             grid.tileZ = value;

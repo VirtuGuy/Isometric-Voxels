@@ -80,6 +80,6 @@ class PlayState extends GameState {
 		debugInfo.x = FlxG.width - debugInfo.width;
 		#end
 
-		super.update(elapsed);
+		super.update(elapsed / 2);
 	}
 }

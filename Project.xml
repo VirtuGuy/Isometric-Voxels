@@ -30,8 +30,10 @@
 	<!-- ________________________________ Defines _______________________________ -->
 
 	<define name="DEBUG_INFO" />
-	<define name="MODDING" if="desktop" />
 	<define name="HOLIDAY_THEMES" />
+
+	<define name="MODDING" if="desktop" />
+	<define name="DISCORD" if="cpp" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
@@ -50,8 +52,12 @@
 	<haxelib name="flixel" />
 	<haxelib name="flixel-ui" />
 	<haxelib name="polymod" if="MODDING" />
+	<haxelib name="hxdiscord_rpc" if="DISCORD" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
+
+	<!--Disables Discord IO threads-->
+	<haxedef name="DISCORD_DISABLE_IO_THREAD" if="DISCORD" />
 
 	<!--Remove the legacy health system-->
 	<haxedef name="FLX_NO_HEALTH" />

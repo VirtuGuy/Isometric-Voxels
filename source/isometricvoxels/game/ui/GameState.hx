@@ -6,6 +6,9 @@ import flixel.FlxState;
 import isometricvoxels.engine.input.Actions;
 import isometricvoxels.engine.ui.Prompt;
 import isometricvoxels.game.modding.ModHandler;
+#if DISCORD
+import isometricvoxels.game.discord.DiscordClient;
+#end
 
 
 /**
@@ -46,6 +49,10 @@ class GameState extends FlxState {
 
             ModHandler.loadAllMods();
             Actions.init();
+
+            #if DISCORD
+            DiscordClient.init();
+            #end
 
             FlxG.stage.showDefaultContextMenu = false;
             FlxG.stage.quality = LOW;

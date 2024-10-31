@@ -1,5 +1,6 @@
 package isometricvoxels.game.discord;
 
+import isometricvoxels.engine.util.Constants;
 #if DISCORD
 import hxdiscord_rpc.Discord;
 import hxdiscord_rpc.Types;
@@ -33,7 +34,7 @@ class DiscordClient {
         handlers.ready = cpp.Function.fromStaticFunction(onReady);
         handlers.disconnected = cpp.Function.fromStaticFunction(onDisconnected);
         handlers.errored = cpp.Function.fromStaticFunction(onError);
-        Discord.Initialize('1301274930041851985', cpp.RawPointer.addressOf(handlers), 1, null);
+        Discord.Initialize(Constants.DISCORD_APPLICATION_ID, cpp.RawPointer.addressOf(handlers), 1, null);
 
         // Creates the client update thread
         Thread.create(() -> {
@@ -56,7 +57,6 @@ class DiscordClient {
     static public function changePresence(details:String, ?state:String) {
         var presence:DiscordRichPresence = DiscordRichPresence.create();
         presence.details = details;
-
         if (state != null)
             presence.state = state;
 
@@ -65,7 +65,7 @@ class DiscordClient {
 
 
     static private function onReady(request:cpp.RawConstPointer<DiscordUser>) {
-        changePresence('');
+        trace('Discord RPC initialized successfully!');
     }
 
     static private function onDisconnected(code:Int, message:cpp.ConstCharStar) {

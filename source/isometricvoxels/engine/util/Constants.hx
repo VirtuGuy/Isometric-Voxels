@@ -35,4 +35,11 @@ class Constants {
      * The amount of pixels applied between buttons in a prompt.
     **/
     inline static public final PROMPT_BUTTON_SPACING = 5;
+
+    #if DISCORD
+    /**
+     * The Discord Application ID used for the Discord Rich Presence.
+    **/
+    inline static public final DISCORD_APPLICATION_ID:String = '1301274930041851985';
+    #end
 }

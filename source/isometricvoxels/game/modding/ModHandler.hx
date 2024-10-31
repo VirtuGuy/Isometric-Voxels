@@ -1,12 +1,12 @@
 package isometricvoxels.game.modding;
 
-#if (MODDING && polymod)
+#if MODDING
 import polymod.Polymod;
-#end
 
 
 /**
  * A class for handling mod support.
+ * This class should only be used for desktop targets.
 **/
 class ModHandler {
     /**
@@ -30,7 +30,6 @@ class ModHandler {
      * Initializes and reloads the modding system.
     **/
     static public function init() {
-        #if (MODDING && polymod)
         // Initializes Polymod
         Polymod.init({
             modRoot: MOD_DIR,
@@ -42,7 +41,6 @@ class ModHandler {
 
         // Clears the asset cache
         Polymod.clearCache();
-        #end
     }
 
     /**
@@ -71,10 +69,8 @@ class ModHandler {
      * Loads every mod located in the mods folder.
     **/
     static public function loadAllMods() {
-        #if (MODDING && polymod)
         for (mod in Polymod.scan({apiVersionRule: API_VER, errorCallback: _onError}))
             loadMod(mod.id);
-        #end
     }
 
     /**
@@ -86,7 +82,6 @@ class ModHandler {
     }
 
 
-    #if (MODDING && polymod)
     static function _onError(error:PolymodError) {
         switch (error.code) {
             case FRAMEWORK_INIT | FRAMEWORK_AUTODETECT:
@@ -95,5 +90,5 @@ class ModHandler {
                 trace(error.message);
         }
     }
-    #end
 }
+#end

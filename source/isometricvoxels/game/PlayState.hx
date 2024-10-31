@@ -6,6 +6,7 @@ import flixel.util.FlxColor;
 import isometricvoxels.engine.voxel.world.VoxelWorld;
 import isometricvoxels.game.ui.GameState;
 import isometricvoxels.game.ui.WorldPrompt;
+#if DISCORD import isometricvoxels.game.discord.DiscordClient; #end
 
 
 /**
@@ -65,7 +66,17 @@ class PlayState extends GameState {
 
 			// Makes the mouse visible
 			FlxG.mouse.visible = false;
+
+			// Updates the Discord RPC
+			#if DISCORD
+			DiscordClient.changePresence('Building in a ${world.worldWidth}x${world.worldHeight}x${world.worldLength} world.');
+			#end
 		}
+
+		// Discord starting presence
+		#if DISCORD
+		DiscordClient.changePresence('Creating a world.');
+		#end
 
 		super.create();
 	}

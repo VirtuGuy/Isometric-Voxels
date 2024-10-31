@@ -3,7 +3,10 @@ grass
 dirt
 wood
 log
+dead-grass
+pumpkin
 tile-stair
 grass-stair
 dirt-stair
 wood-stair
+dead-grass-stair
